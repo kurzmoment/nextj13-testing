@@ -7,14 +7,6 @@ type Data = {
   elevation: number;
 };
 
-async function getData() {
-  console.log(process.env.NEXT_APP_OPENWEATHER_API);
-  const res = await fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=Prague&limit=5&appid=${process.env.NEXT_APP_OPENWEATHER_API}`
-  );
-  return res.json();
-}
-
 function Index() {
   return (
     <form action="" className="flex flex-col w-1/2 m-auto">
