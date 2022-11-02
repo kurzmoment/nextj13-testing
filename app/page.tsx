@@ -1,31 +1,39 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 
-type Data = {
-  latititude: number;
-  longitude: number;
-  timezone: string;
-  elevation: number;
-};
+import PocketBase from "pocketbase";
+import Task from "../components/Task";
+import InsertTask from "../components/InsertTask";
 
-function Index() {
+async function getData() {
+  const client = new PocketBase("http://127.0.0.1:8090");
+  const records = await client.records.getFullList("post", 200, {
+    sort: "-created",
+  });
+  return records;
+}
+
+async function Index() {
+  const data = await getData();
+  console.log(data);
+
   return (
-    <form action="" className="flex flex-col w-1/2 m-auto">
-      <input
-        type="text"
-        placeholder="Enter a name"
-        className="outline-none m-2 p-2 border border-gray-400"
-      />
-      <input
-        type="text"
-        placeholder="Enter a text"
-        className="outline-none m-2 p-2 border border-gray-400"
-      />
-      <div className="m-auto">
-        <button className="bg-blue-500 m-2 p-2 text-white rounded-md">
-          Save text
-        </button>
+    <div className="">
+      <div className="grid grid-cols-4 gap-4 content-end">
+        {data.map((data) => (
+          <Task
+            key={data.id}
+            name={data.name}
+            text={data.text}
+            id={data.id}
+            created={data.created}
+          />
+        ))}
       </div>
-    </form>
+      <div>
+        <InsertTask />
+      </div>
+    </div>
   );
 }
 
